@@ -1,0 +1,35 @@
+version: "2"
+services:
+  api-mongo:
+    container_name: api-mongo
+    image: mongo
+    volumes:
+      - ../docker/api-mogno/data:/data/db
+    ports:
+      - "27017:27017"
+  api-service:
+    container_name: api-service
+    build:
+      context: .
+      dockerfile: docker/api-service/Dockerfile
+    ports:
+      - "3000:3000"
+    links:
+      - api-mongo
+    environment:
+      - ENV=DEV
+      - PORT=3000
+      - DB=mongodb://api-mongo/cats?readPreference=primary
+    depends_on:
+          - api-mongo
+  api-test-runner:
+    container_name: api-test-runner
+    build:
+      context: .
+      dockerfile: ./docker/api-test-runner/Dockerfile
+    environment:
+      - DB=mongodb://api-mongo/cats?readPreference=primary
+      - HOST=http://api-service:3000/
+    depends_on:
+          - api-service
+          - api-mongo
