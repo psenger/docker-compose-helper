@@ -10,7 +10,7 @@
   "author": "Phil Senger",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^4.13.7",
+    "mongoose": "^4.13.21",
     "restify": "^6.3.4"
   },
   "devDependencies": {
